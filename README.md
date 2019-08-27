@@ -7,12 +7,11 @@ Example implementation of:
 - kafka
 - zookeeper
 - golang producer inserting record every 3 seconds
-- golang consumer reading from kafka (TODO)
+- golang consumer reading from kafka
 
 ## Running
 
-`docker-composer up`
-
-## TODO
-
-- golang consumer
+```
+docker-composer up -d
+docker logs --follow consumer
+```

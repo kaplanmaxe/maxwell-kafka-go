@@ -17,7 +17,7 @@ services:
   producer:
     command: --dbAddress db:3306
     build:
-      context: .
+      context: ./producer
       dockerfile: Dockerfile
     container_name: producer
     image: producer
@@ -52,6 +52,17 @@ services:
     container_name: kafka
     volumes:
       - /var/run/docker.sock:/var/run/docker.socks
+
+  consumer:
+    command: --bootstrapAddress kafka:9092
+    build:
+      context: ./consumer
+      dockerfile: Dockerfile
+    container_name: consumer
+    image: consumer
+    depends_on:
+      - kafka
+    restart: always
 
 volumes:
   maria:
