@@ -1,0 +1,37 @@
+version: '3.6'
+
+services:
+  db:
+    command: --log-bin=master --binlog-format=row
+    container_name: mariadb
+    image: mariadb:10.4.4-bionic
+    restart: always
+    ports:
+      - "33104:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    volumes:
+      - maria:/var/lib/mysql
+      - ./database/:/docker-entrypoint-initdb.d/
+
+  producer:
+    command: --dbAddress db:3306
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: producer
+    image: producer
+    depends_on:
+      - db
+      - maxwell
+    restart: always
+
+  maxwell:
+    container_name: maxwell
+    image: zendesk/maxwell
+    depends_on:
+      - db
+    command: ./bin/maxwell --user=root --password=example --host=db --producer=stdout --log_level=error
+
+volumes:
+  maria:
