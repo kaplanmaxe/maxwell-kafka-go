@@ -4,8 +4,8 @@ Example implementation of:
 
 - mariadb
 - maxwell
-- kafka (TODO)
-- zookeeper (TODO)
+- kafka
+- zookeeper
 - golang producer inserting record every 3 seconds
 - golang consumer reading from kafka (TODO)
 

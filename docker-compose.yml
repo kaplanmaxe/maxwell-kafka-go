@@ -31,7 +31,27 @@ services:
     image: zendesk/maxwell
     depends_on:
       - db
-    command: ./bin/maxwell --user=root --password=example --host=db --producer=stdout --log_level=error
+      - kafka
+    command: ./bin/maxwell --user=root --password=example --host=db --producer=kafka --log_level=error --kafka.bootstrap.servers=kafka:9092 --kafka_topic=maxwell
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+    container_name: zookeeper
+  
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+    hostname: kafka
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "maxwell:1:1"
+    container_name: kafka
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.socks
 
 volumes:
   maria:
