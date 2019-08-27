@@ -15,6 +15,4 @@ Example implementation of:
 
 ## TODO
 
-- get all services to wait properly for mysql
-- zookeeper
-- kafka
+- golang consumer
